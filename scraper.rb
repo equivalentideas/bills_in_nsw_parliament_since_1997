@@ -14,18 +14,10 @@ agent = Mechanize.new
   if !page.at('.bodyText').at(:table).nil?
     page.at('.bodyText').at(:table).search(:tr)[1..-1].each do |row|
 
-      # Get the mp who introduced the bill
-      if row.search(:td)[2].at(:span).children.map(&:text).select {|a| a.include?("by")}.count != 0
-        introduced_by = row.search(:td)[2].at(:span).children.map(&:text).select {|a| a.include?("by")}[0].sub(/^Introduced by /,'')
-      else
-        introduced_by = nil
-      end
-
       bill = {
         name: row.search(:td)[0].text,
         url: root + row.search(:td)[0].at(:a)[:href],
-        house_of_origin: row.search(:td)[1].text,
-        introduced_by: introduced_by
+        house_of_origin: row.search(:td)[1].text
       }
 
       p bill
